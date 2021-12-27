@@ -9,6 +9,7 @@ class Fraction;
 Fraction operator*(Fraction left, Fraction right);
 Fraction operator/(Fraction left, Fraction right);
 Fraction operator+(Fraction left, Fraction right);
+Fraction operator-(Fraction left, Fraction right);
 
 class Fraction
 {
@@ -96,6 +97,25 @@ public:
 	}
 
 	//				Operators:
+	Fraction& operator=(double ra)
+	{
+		int ost = (int)ra;
+		int count = 0;
+		double old_ra = ra;
+		// The number to the right of the point
+		while (ost != ra) {
+			count++;
+			ra *= 10;
+			ost = (int)ra;
+		}
+		this->denominator = 1;
+
+		for (int i = 0; i < count; i++) this->denominator *= 10;
+		this->numerator = (old_ra - (int)old_ra) * denominator;
+		this->integer = (int)old_ra;
+		reduce();
+		return *this;
+	}
 	Fraction& operator=(const Fraction& other)
 	{
 		this->integer = other.integer;
@@ -114,7 +134,40 @@ public:
 	{
 		return *this = *this / other;
 	}
+	Fraction& operator+=(const Fraction& other)
+	{	
+		return *this = *this + other;
+	}
+	Fraction& operator-= (const Fraction& other)
+	{
+		return *this=*this-other;
+	}
+	Fraction& operator++()
+	{
+		integer++;
+		return *this;
+	}
+	Fraction operator++(int)
+	{
+		Fraction old = *this;
+		integer++;
+		return old;
+	}
 
+	Fraction operator--()
+	{
+		if (integer != 0)  integer--;
+		return *this;
+	}
+	Fraction operator--(int)
+	{
+		Fraction old=*this;
+		if (integer != 0)  integer--;
+		return old;
+	}
+
+
+	
 	//				Type-cast operators:
 	explicit operator int()const
 	{
@@ -254,6 +307,57 @@ Fraction operator-(Fraction left, Fraction right)
 	).to_proper().reduce();
 }
 
+bool operator==(Fraction& left, Fraction& right)
+{
+	bool result;
+	
+	left.to_improper();
+	right.to_improper();
+	result = (
+		(double)left.get_numerator() / (double)left.get_denominator() ==
+		(double)right.get_numerator() / (double)right.get_denominator()
+			 ) ? true : false;
+	
+	return result;
+}
+bool operator!=(Fraction& left, Fraction& right)
+{
+	bool result;
+	left.to_improper();
+	right.to_improper();
+	result = (
+		(double)left.get_numerator() / (double)left.get_denominator() !=
+		(double)right.get_numerator() / (double)right.get_denominator()
+		) ? true : false;
+
+	return result;
+}
+bool operator >(Fraction& left, Fraction& right) 
+{
+	bool result;
+	left.to_improper();
+	right.to_improper();
+	result = (
+		(double)left.get_numerator() / (double)left.get_denominator() >
+		(double)right.get_numerator() / (double)right.get_denominator()
+		) ? true : false;
+
+	return result;
+}
+bool operator <(Fraction& left, Fraction& right) 
+{
+	bool result;
+	left.to_improper();
+	right.to_improper();
+	result = (
+		(double)left.get_numerator() / (double)left.get_denominator() <
+		(double)right.get_numerator() / (double)right.get_denominator()
+		) ? true : false;
+
+	return result;
+}
+
+
 
 std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 {
@@ -296,14 +400,49 @@ void main()
 #endif // CONSTRUCTORS_CHECK
 
 #ifdef OPERATORS_CHECK
+	int a=0,
+		b=0;
 	Fraction A(3, 3, 4);
 	Fraction B(3, 4, 5);
+	Fraction T;
+	Fraction D;
+	D = 2.75;
+	D.print();
+	do
+	{
+		cout << "Введите простую дробь : "; cin >> a; cin >> b;
+
+	} while (a>b);
+	
+	T.set_numerator(a);
+	T.set_denominator(b);
+	cout << "T++ ; "; T++;
+	T.print();
+	
+	cout << "--T ; "<<--T<<endl;
+	//cout << a << " / " << b << endl;
+	
+
+	A.print();
+	B.print();
+
 	A.to_improper();
 	B.to_improper();
 
 	A.print();
 	B.print();
+
 	cout << "\n--------------------------\n";
+	cout << "Сравнение == дробей  : ";
+	(A == B) ? cout << "true" : cout << "false";
+	cout << "\n--------------------------\n";
+	cout << "Сравнение > дробей  : ";
+	(A > B) ? cout << "true" : cout << "false";
+	cout << "\n--------------------------\n";
+	cout << "Сравнение < дробей  : "<<(double)A << " < " << (double)B<<endl;
+	(A < B) ? cout << "true" : cout << "false";
+	cout << "\n--------------------------\n";
+
 	cout << "Умножение дробей : ";
 	Fraction C = A * B;
 	C.print();
@@ -320,12 +459,19 @@ void main()
 	C = A - B;
 	C.print();
 	cout << "\n--------------------------\n";
-
-
-	A *= B;
-	//A.print();
+	cout << "Присваивание += дробей : ";
+	A += B;
 	cout << A << endl;
-	//cout << 123 << endl;  
+	cout << "\n--------------------------\n";
+	cout << "Присваивание -= дробей : ";
+	A -= B;
+	cout << A << endl;
+	cout << "\n--------------------------\n";
+	cout << "Присваивание *= дробей : ";
+	A *= B;
+	cout << A << endl;
+	
+
 #endif // OPERATORS_CHECK
 
 #ifdef TYPE_CONVERSIONS_BASICS
@@ -360,15 +506,7 @@ void main()
 	cout << B << endl;
 #endif // CONVERSIONS_FROM_OTHER_TYPES_TO_CLASS
 
-	/*
-	----------------------------------------------------
-	operator type()
-	{
-
-	}
-	----------------------------------------------------
-	*/
-
+	
 	/*Fraction A(5);
 	int a = A;
 	cout << a << endl;
@@ -376,6 +514,6 @@ void main()
 	double b = B;
 	cout << b << endl;*/
 
-	cout << ((double)Fraction(1, 2) == (double)Fraction(5, 10)) << endl;
+	//cout << ((double)Fraction(1, 2) == (double)Fraction(5, 10)) << endl;
 }
 
