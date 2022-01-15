@@ -371,7 +371,41 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 	else if (obj.get_integer() == 0)cout << 0;
 	return os;
 }
+std::istream& operator>>(std::istream& is, Fraction& obj) {
+	/*INT INTEGER, NUMERATOR, DENOMINATOR;
+	is >> INTEGER >> NUMERATOR >> DENOMINATOR;
+	OBJ.SET_INTEGER(INTEGER);
+	OBJ.SET_NUMERATOR(NUMERATOR);
+	OBJ.SET_DENOMINATOR(DENOMINATOR);*/
+	obj = Fraction(); // Обнуляем обьект - задаем ему значение по умолчание.
+	const int SIZE = 256;
+	char buffer[SIZE] = {};
+	
+	//is >> buffer;
+	is.getline(buffer, SIZE); // Вводится строку с пробелами
+	char delimiters[] = "/( )";
 
+	char* number[3] = {}; // Сюда будут сохранятся числа из исходной строки (из буфера).
+	int n = 0; // считает сколько чисел мы вытащили из исходной строки
+	for (char *pch=strtok(buffer,delimiters);pch;pch=strtok(NULL,delimiters))
+	{
+		number[n++] = pch;
+	}
+	switch (n)
+	{
+	case 1: obj.set_integer(atoi(number[0])); break;
+		// atoi ()  Принимает строку, и возвращает int - ое
+		//значение числа хранещегося в строке
+	case 2: obj.set_numerator(atoi(number[0]));
+	obj.set_denominator(atoi(number[1]));
+	break;
+	case 3: 
+		obj.set_integer(atoi(number[0]));
+		obj.set_numerator(atoi(number[1]));
+		obj.set_denominator(atoi(number[2]));
+	}
+	return is;
+}
 //#define CONSTRUCTORS_CHECK
 #define OPERATORS_CHECK
 //#define TYPE_CONVERSIONS_BASICS
@@ -408,15 +442,11 @@ void main()
 	Fraction D;
 	D = 2.75;
 	D.print();
-	do
-	{
-		cout << "Введите простую дробь : "; cin >> a; cin >> b;
+			cout << "Введите простую дробь : "; cin >> T; 
 
-	} while (a>b);
-	
-	T.set_numerator(a);
+	/*T.set_numerator(a);
 	T.set_denominator(b);
-	cout << "T++ ; "; T++;
+	cout << "T++ ; "; T++;*/
 	T.print();
 	
 	cout << "--T ; "<<--T<<endl;
@@ -515,5 +545,7 @@ void main()
 	cout << b << endl;*/
 
 	//cout << ((double)Fraction(1, 2) == (double)Fraction(5, 10)) << endl;
+	
+
 }
 
