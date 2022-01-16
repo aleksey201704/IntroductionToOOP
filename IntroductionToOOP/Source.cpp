@@ -371,6 +371,7 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 	else if (obj.get_integer() == 0)cout << 0;
 	return os;
 }
+
 std::istream& operator>>(std::istream& is, Fraction& obj) {
 	/*INT INTEGER, NUMERATOR, DENOMINATOR;
 	is >> INTEGER >> NUMERATOR >> DENOMINATOR;
