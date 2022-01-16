@@ -14,10 +14,11 @@ String operator+(String left, String rigth);
 
 class String
 {
-	int size; // –азмер строки
+	
 	
 public:
 	char* str; // Eуказатель на строку в динамическую пам€ть
+	int size; // –азмер строки
 
 	explicit String(int size = 80)
 	{
@@ -42,13 +43,16 @@ public:
 		this->size = other.size;
 		this->str = new char [size] {};
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
-		cout << "Copy Constructor";
+		cout << "Copy Constructor"<<endl;
 	}
 	~String()
 	{
+		
 		delete[] this->str; // ≈сли конструторк выдел€ет пам€ть при помощи new
 		// то деструтор об€зателен должен особожждать эту пам€ть оператором delete
 		// в противном случае будет возникать утечка пам€ти.
+
+		
 	}
 
 				// Operators:
@@ -71,17 +75,37 @@ public:
 	}
 };
 
-//String operator+(String left, String rigth)
-//{
-//	//return String(left,rigth);
-//}
+String operator+(String left, String rigth)
+{
+	String other;
+	
+	other.size = left.size + rigth.size;
+	other.str = new char[other.size]{};
+	int i=0;
+	int t = 0;
+	for (; i < other.size; i++) 
+	{
+		if (left.size-1 > i)
+		{
+			other.str[i] = left.str[i];
+		}
+		else
+		{
+			other.str[i] = rigth.str[t];
+			t++;
+		}
+		
+	
+	}
+		
+	return String(other);
+}
 
 
 std::ostream& operator<<(std::ostream& os, const String& obj)
 {
-	
-	//obj.print();
-	cout << obj.str;
+
+	cout << obj.str << endl;
 	return os;
 }
 
@@ -134,9 +158,10 @@ void main()
 
 	String str1 = "Hello";
 	String str2 = "World";
-	//String str3 = str1 + str2;
+	String str3 = str1 + str2;
 	//cout << str3 << endl; // HelloWorld
-	cout << str2 + str1;
+	cout << str2+str1 << endl;
+	cout << str3<<endl;
 
 }
 
