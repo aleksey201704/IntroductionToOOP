@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <Windows.h>
 
 using namespace std;
@@ -17,13 +17,13 @@ class String
 	
 	
 public:
-	char* str; // Eуказатель на строку в динамическую память
-	int size; // Размер строки
+	char* str; // EСѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂРѕРєСѓ РІ РґРёРЅР°РјРёС‡РµСЃРєСѓСЋ РїР°РјСЏС‚СЊ
+	int size; // Р Р°Р·РјРµСЂ СЃС‚СЂРѕРєРё
 
 	explicit String(int size = 80)
 	{
-		// Блвгодаря параметру size принимаем параметру мы можем создвавать строки
-		// заданого размера
+		// Р‘Р»РІРіРѕРґР°СЂСЏ РїР°СЂР°РјРµС‚СЂСѓ size РїСЂРёРЅРёРјР°РµРј РїР°СЂР°РјРµС‚СЂСѓ РјС‹ РјРѕР¶РµРј СЃРѕР·РґРІР°РІР°С‚СЊ СЃС‚СЂРѕРєРё
+		// Р·Р°РґР°РЅРѕРіРѕ СЂР°Р·РјРµСЂР°
 		this->size = size;
 		this->str = new char[size] {};
 		cout << "Default constractor: " << this << endl;
@@ -31,8 +31,8 @@ public:
 
 	String(const char* str)
 	{
-		this->size = StringLength(str) + 1; // сохраняем размер в Байтах
-		// с учетом
+		this->size = StringLength(str) + 1; // СЃРѕС…СЂР°РЅСЏРµРј СЂР°Р·РјРµСЂ РІ Р‘Р°Р№С‚Р°С…
+		// СЃ СѓС‡РµС‚РѕРј
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++) this->str[i] = str[i];
 
@@ -48,9 +48,9 @@ public:
 	~String()
 	{
 		
-		delete[] this->str; // Если конструторк выделяет память при помощи new
-		// то деструтор обязателен должен особожждать эту память оператором delete
-		// в противном случае будет возникать утечка памяти.
+		delete[] this->str; // Р•СЃР»Рё РєРѕРЅСЃС‚СЂСѓС‚РѕСЂРє РІС‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РїСЂРё РїРѕРјРѕС‰Рё new
+		// С‚Рѕ РґРµСЃС‚СЂСѓС‚РѕСЂ РѕР±СЏР·Р°С‚РµР»РµРЅ РґРѕР»Р¶РµРЅ РѕСЃРѕР±РѕР¶Р¶РґР°С‚СЊ СЌС‚Сѓ РїР°РјСЏС‚СЊ РѕРїРµСЂР°С‚РѕСЂРѕРј delete
+		// РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ Р±СѓРґРµС‚ РІРѕР·РЅРёРєР°С‚СЊ СѓС‚РµС‡РєР° РїР°РјСЏС‚Рё.
 
 		
 	}
@@ -58,13 +58,38 @@ public:
 				// Operators:
 	String& operator=(const String& other)
 	{
-		if (this == &other) return *this; // если одинаковые значения
+		if (this == &other) return *this; // РµСЃР»Рё РѕРґРёРЅР°РєРѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
 
-		delete[] this->str; // Затираем старое значение
+		delete[] this->str; // Р—Р°С‚РёСЂР°РµРј СЃС‚Р°СЂРѕРµ Р·РЅР°С‡РµРЅРёРµ
 		this->size = other.size;
 		this->str = new char [size] {};
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
 		cout << "Copy Assigment: \t";
+		return *this;
+	}
+	String operator+=(const String& other)
+	{
+		String left;
+		left.size = this->size + other.size;
+		//this->str = new char [size] {};
+		int t = 0;
+		for (int i = 0; i < left.size; i++)
+		{
+			if (this->size-1>i)
+			{
+				left.str[i] = this->str[i];
+			}
+			else
+			{
+				left.str[i] = other.str[t];
+				t++;
+			}
+			
+		}
+		this->str = new char[left.size]{};
+
+		for (int i = 0; i < left.size; i++)this->str[i] = left.str[i];
+		
 		return *this;
 	}
 	
@@ -126,7 +151,7 @@ void main()
 	const int SIZE = 20;
 	char str[SIZE] = {};
 
-	cout << "Строку"; /*cin >> str;*/
+	cout << "РЎС‚СЂРѕРєСѓ"; /*cin >> str;*/
 	SetConsoleCP(1251);
 	cin.getline(str, SIZE);
 	SetConsoleCP(1251);
@@ -137,8 +162,8 @@ void main()
 	String str1;
 	str1.print();
 
-	// String str2=25; // Преобразование int в string запрещено
-	String str2(25); // explicint конструтор можно вызвать только так
+	// String str2=25; // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ int РІ string Р·Р°РїСЂРµС‰РµРЅРѕ
+	String str2(25); // explicint РєРѕРЅСЃС‚СЂСѓС‚РѕСЂ РјРѕР¶РЅРѕ РІС‹Р·РІР°С‚СЊ С‚РѕР»СЊРєРѕ С‚Р°Рє
 	str2.print();
 
 	//cout << "StringLength:\t"  << StringLength("Hello");
@@ -148,7 +173,7 @@ void main()
 
 	str3 = str3;
 
-	String str4 = str3; // Вызывает Copy Constructor
+	String str4 = str3; // Р’С‹Р·С‹РІР°РµС‚ Copy Constructor
 	str4.print();
 
 	String str5;
@@ -162,6 +187,8 @@ void main()
 	//cout << str3 << endl; // HelloWorld
 	cout << str2+str1 << endl;
 	cout << str3<<endl;
+	str1 += str2;
+	cout <<"+= : " << str1;
 
 }
 
