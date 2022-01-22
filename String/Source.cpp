@@ -182,7 +182,7 @@ void main()
 #endif // BASIC_CHECK
 
 	String str1 = "Hello";
-	String str2 = "World";
+	String str2 = "Wod";
 	String str3 = str1 + str2;
 	//cout << str3 << endl; // HelloWorld
 	cout << str2+str1 << endl;
